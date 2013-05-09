@@ -5,9 +5,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -29,6 +31,8 @@ public class GPSTracker extends Service implements LocationListener {
 	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
 	protected LocationManager locationManager;
+
+	private float batteryPct = 0.0f;
 
 	@Override
 	public void onLocationChanged(Location arg0) {
@@ -66,6 +70,7 @@ public class GPSTracker extends Service implements LocationListener {
 	}
 
 	private Location getLocation() {
+		float beforeBatteryStatus = getBatteryStatus();
 		try {
 			locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 			isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -105,6 +110,7 @@ public class GPSTracker extends Service implements LocationListener {
 			Log.e("LBSApp", e.getMessage());
 		}
 		
+		setBatteryPct(beforeBatteryStatus - getBatteryStatus());
 		return location;
 	}
 	
@@ -157,6 +163,25 @@ public class GPSTracker extends Service implements LocationListener {
 			longitude = location.getLongitude();
 		}
 		return longitude;
+	}
+
+	
+	public float getBatteryStatus(){
+		IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		Intent batteryStatus = mContext.registerReceiver(null, ifilter);
+		
+		int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+		int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+			
+		return  (level/ (float)scale);
+	}
+
+	public float getBatteryPct() {
+		return batteryPct;
+	}
+
+	public void setBatteryPct(float batteryPct) {
+		this.batteryPct = batteryPct;
 	}
 
 }
