@@ -11,8 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	   
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -28,8 +29,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Receivers.MyLocationReceiver"></receiver>
-        <service android:name=".Services.MyLocationService"></service>
+        <receiver android:name=".Receivers.BootBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Receivers.MyLocationReceiver">
+            <intent-filter >
+                <action android:name="com.lbsapp.Services.LOCATION_CHAGNED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Receivers.PowerStateReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_LOW"/>
+                <action android:name="android.intent.action.BATTERY_OKAY"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".Services.UserLocationBroadcastService"></service>
     </application>
 
 </manifest>

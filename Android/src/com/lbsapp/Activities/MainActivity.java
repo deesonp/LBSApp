@@ -1,11 +1,19 @@
 package com.lbsapp.Activities;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +22,7 @@ import android.widget.TextView;
 import com.lbsapp.R;
 import com.lbsapp.Receivers.MyLocationReceiver;
 import com.lbsapp.Services.GPSTracker;
-import com.lbsapp.Services.MyLocationService;
+import com.lbsapp.Services.UserLocationBroadcastService;
 import com.lbsapp.utils.DatabaseAdapter;
 
 public class MainActivity extends Activity {
@@ -26,6 +34,8 @@ public class MainActivity extends Activity {
 	TextView longitudeTextView;
 	TextView latitudeTextView;
 	TextView batteryStatusTextView;
+	
+	AlarmManager alarmManager;
 	
 	GPSTracker gps;
 	float batteryPct;
@@ -49,8 +59,33 @@ public class MainActivity extends Activity {
 		printDBTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
 		batteryStatusTextView = (TextView) findViewById(R.id.batteryLevel);
 		
-		Intent i = new Intent(this, MyLocationReceiver.class);
-		pendingIntent = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		// i = new Intent(this, MyLocationReceiver.class);
+		//pendingIntent = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		
+		final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if(lm != null){
+			final List<String> providers = lm.getAllProviders();
+			if(providers.size() > 0){
+				Location bestLocation = null;
+				for(String provider: lm.getAllProviders()){
+					final Location lastLocation = lm.getLastKnownLocation(provider);
+					if(lastLocation != null){
+						
+						if(bestLocation == null || !bestLocation.hasAccuracy() || (lastLocation.hasAccuracy() && lastLocation.getAccuracy() < bestLocation.getAccuracy())){
+							bestLocation = lastLocation;
+						}
+					}
+				}
+				
+				if(bestLocation != null){
+					Log.d("LBSAPP","BEST LOCATION :" + bestLocation.getLatitude() +", " +bestLocation.getLongitude());
+				}
+			}
+		}
+		
+		startAlarmListener(this);
+
 		
 		printDbButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -69,6 +104,8 @@ public class MainActivity extends Activity {
 				allLoc.close();
 			}
 		});
+		
+		
 		locateMeButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -89,13 +126,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		startService(new Intent(getBaseContext(), MyLocationService.class));
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		stopService(new Intent(getBaseContext(), MyLocationService.class));
 	}
 	
 	
@@ -111,7 +146,25 @@ public class MainActivity extends Activity {
 		dbAdapter.close();
 		super.onPause();
 	}
+	
+	
+	public static void startAlarmListener(Context context){
+		Intent i = new Intent(context, UserLocationBroadcastService.class);
+		PendingIntent alarmIntent = PendingIntent.getService(context, 2, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.cancel(alarmIntent);
+		am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 1000*60, alarmIntent);
+		
+	}
 
+	public static void stopAlarmListener(Context context){
+		Intent i = new Intent(context,UserLocationBroadcastService.class);
+		PendingIntent alarmIntent = PendingIntent.getService(context, 2, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.cancel(alarmIntent);
+		
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
