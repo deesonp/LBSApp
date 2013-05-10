@@ -1,10 +1,9 @@
 package com.lbsapp.Activities;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
@@ -12,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.androidchallenge.lbsapp.R;
+import com.lbsapp.R;
+import com.lbsapp.Receivers.MyLocationReceiver;
 import com.lbsapp.Services.GPSTracker;
+import com.lbsapp.Services.MyLocationService;
 import com.lbsapp.utils.DatabaseAdapter;
 
 public class MainActivity extends Activity {
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
 	
 	GPSTracker gps;
 	float batteryPct;
+	PendingIntent pendingIntent;
 	
 	DatabaseAdapter dbAdapter;
 
@@ -47,6 +49,8 @@ public class MainActivity extends Activity {
 		printDBTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
 		batteryStatusTextView = (TextView) findViewById(R.id.batteryLevel);
 		
+		Intent i = new Intent(this, MyLocationReceiver.class);
+		pendingIntent = PendingIntent.getBroadcast(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 		
 		printDbButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -69,7 +73,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
 				if (gps.canGetLocation()) {
 					longitudeTextView.setText(gps.getLongitude() + "");
 					latitudeTextView.setText(gps.getLatitude() + "");
@@ -81,6 +84,18 @@ public class MainActivity extends Activity {
 
 			}
 		});
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		startService(new Intent(getBaseContext(), MyLocationService.class));
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		stopService(new Intent(getBaseContext(), MyLocationService.class));
 	}
 	
 	
