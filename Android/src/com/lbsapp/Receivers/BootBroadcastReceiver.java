@@ -1,6 +1,7 @@
 package com.lbsapp.Receivers;
 
-import com.lbsapp.Activities.MainActivity;
+import com.lbsapp.Common.UserLocation;
+import com.lbsapp.Utils.Constants;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,8 +14,10 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG, "Alarm started at boot");
-		MainActivity.startAlarmListener(context);
+		if(Constants.DEBUG){
+			Log.d(Constants.LOG_TAG, TAG + " : Starting Alarm ...");
+		}
+		UserLocation.startAndStopAlarm(context, true);
 	}
 
 }
