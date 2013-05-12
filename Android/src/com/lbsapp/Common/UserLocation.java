@@ -6,35 +6,34 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 
+import com.lbsapp.R;
 import com.lbsapp.Services.UserLocationBroadcastService;
 import com.lbsapp.Utils.Constants;
+import com.lbsapp.Utils.DatabaseAdapter;
 
 public class UserLocation {
 
 	private static final String TAG = "UserLocation";
 	public static final String brodacastMessage = "com.lbsapp.broadcast.LOCATION_CHANGED";
-
-	private static long alarmFrequency = (long) (1000*60.);
-
-	public static long getAlarmFrequency() {
-		return alarmFrequency;
-	}
-
-	public static void initUserTracking(final Context context) {
+	
+	public static Location getBestLocation(final Context context) {
 		if (Constants.DEBUG) {
 			Log.d(Constants.LOG_TAG, TAG + " : beginUserTracking");
 		}
+		Location bestLocation = null;
 		final LocationManager lm = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
 		if (lm != null) {
 			final List<String> providers = lm.getAllProviders();
 			if (providers.size() > 0) {
-				Location bestLocation = null;
 				for (String provider : lm.getAllProviders()) {
 					final Location lastLocation = lm
 							.getLastKnownLocation(provider);
@@ -49,20 +48,30 @@ public class UserLocation {
 					}
 				}
 				
-				if (Constants.DEBUG) {
-					if (bestLocation != null) {
-						Log.d(Constants.LOG_TAG,
-								"BEST LOCATION :" + bestLocation.getLatitude()
-										+ ", " + bestLocation.getLongitude());
+				if (bestLocation != null) {
+					if (Constants.DEBUG) {
+						Log.d(Constants.LOG_TAG, "BEST LOCATION :"
+								+ bestLocation.getLatitude() + ", "
+								+ bestLocation.getLongitude());
 					}
+					
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putFloat(Constants.LAST_LOCATION_UPDATE_LAT, (float) bestLocation.getLatitude());
+					editor.putFloat(Constants.LAST_LOCATION_UPDATE_LNG, (float) bestLocation.getLongitude());
+					editor.commit();
 				}
 			}
 		}
+		return bestLocation;
 	}
 
 	public static void startAndStopAlarm(final Context context,
 			boolean enableAlarm) {
-
+		
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String alarmFrequency = pref.getString(context.getString(R.string.alarm_freq_key), Constants.DEFAULT_ALARM_FREQ); 
+		
 		final Intent broadcastServiceIntent = new Intent(context,
 				UserLocationBroadcastService.class);
 		final PendingIntent alarmIntent = PendingIntent.getService(context,
@@ -74,7 +83,7 @@ public class UserLocation {
 		if (enableAlarm) {
 			am.cancel(alarmIntent);
 			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-					SystemClock.elapsedRealtime(), getAlarmFrequency(),
+					SystemClock.elapsedRealtime(), Long.parseLong(alarmFrequency),
 					alarmIntent);
 			if (Constants.DEBUG) {
 				Log.d(Constants.LOG_TAG, TAG
@@ -88,5 +97,19 @@ public class UserLocation {
 			}
 		}
 	}
-
+	
+	
+	public static void processLocation(Context context, Location loc) {
+		if (loc != null) {
+			DatabaseAdapter db = new DatabaseAdapter(context);
+			db.open();
+			db.insertLocation(String.valueOf(loc.getLatitude()), String.valueOf(loc.getLongitude()));
+			db.close();
+			if (Constants.DEBUG) {
+				Log.d(Constants.LOG_TAG, "processLocation: latitude: " + loc.getLatitude()
+						+ " , longitude: " + loc.getLongitude());
+			}
+		}
+	}
+	
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/tracking_category_key"
+        android:title="@string/settings_tracking_category" >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/gps_provider_key"
+            android:summary="@string/settings_gps_provider_summary"
+            android:title="@string/settings_gps_provider_title" />
+         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/network_provider_key"
+            android:summary="@string/settings_network_provider_summary"
+            android:title="@string/settings_network_provider_title" />
+          <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/boot_tracking_key"
+            android:summary="@string/settings_boot_tracking_summary"
+            android:title="@string/settings_boot_tracking_title" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="@string/update_category_key"
+        android:title="@string/settings_update_category">
+          
+        <ListPreference 
+            android:key="@string/alarm_freq_key"
+            android:title="@string/settings_alarm_freq"
+            android:summary="@string/settings_alarm_freq_summary"
+            android:entries="@array/alarm_freq"
+            android:entryValues ="@array/alarm_freq_values"
+            android:defaultValue= "1800000"
+            />
+    </PreferenceCategory>
+    
+<!-- add Criteria  -->
+
+</PreferenceScreen>

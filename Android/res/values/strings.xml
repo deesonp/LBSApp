@@ -4,5 +4,25 @@
     <string name="app_name">LBSApp</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="tracking_category_key">trackingCategoryKey</string>
+    <string name="gps_provider_key">gpsProviderKey</string>
+    <string name="network_provider_key">networkProviderKey</string>
+    <string name="boot_tracking_key">bootTrackingKey</string>
+    <string name="update_category_key">updateCategoryKey</string>
+	<string name="alarm_freq_key">alarmFreqKey</string>
+	<string name="settings_tracking_category">Location Tracking</string>
+	<string name="settings_gps_provider_summary">Track location using on-device GPS</string>
+	<string name="settings_gps_provider_title">GPS Tracking</string>
+	<string name="settings_network_provider_summary">Track location using on-device WiFi/Network</string>
+	<string name="settings_network_provider_title">WiFi/Network Tracking</string>
+	<string name="settings_boot_tracking_summary">Begin tracking device when the device is turned on</string>
+	<string name="settings_boot_tracking_title">Device Boot Tracking</string>
+	<string name="settings_update_category">Location Tracking Updates</string>
+	<string name="settings_alarm_freq">Update Frequency</string>
+	<string name="settings_alarm_freq_summary">Adjust location tracking frequency</string>
+	<string name="enable_location_service">Enable Location Services</string>
+	<string name="enable_location_dialog_msg">Location services are disabled. Please enable Location services to allow acces to GPS and Google\'s Location service.</string>
+	<string name="cancel">Cancel</string>
+	<string name="enable_location">Enable Service</string>
+	<string name="action_map">Display Map</string>
 </resources>

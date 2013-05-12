@@ -88,4 +88,12 @@
         android:layout_marginRight="18dp"
         android:text="BatteryLevel" />
 
+    <TextView
+        android:id="@+id/ServiceStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/batteryLevel"
+        android:layout_below="@+id/batteryLevel"
+        android:text="Service Status" />
+
 </RelativeLayout>

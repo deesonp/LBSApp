@@ -28,7 +28,6 @@ public class DatabaseAdapter {
 	//Battery Table & Columns
 	private static final String DB_BATTERY_STAT_TABLE = "battery";
 	private static final String KEY_ID = "_id";
-	private static final String KEY_BATTERY_STAT_ID = "statID";
 	private static final String KEY_BATTERY_LEVEL_DELTA = "level";
 	private static final String KEY_BATTERY_STATE = "state";
 	
@@ -42,7 +41,6 @@ public class DatabaseAdapter {
 	private static final String TABLE_BATTERY_STAT_CREATE = "CREATE TABLE "
 			+ DB_BATTERY_STAT_TABLE 
 			+ " ("+ KEY_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
-			+ KEY_BATTERY_STAT_ID + " INTEGER REFERENCES "+DB_TABLE+"("+KEY_LOCATION_ID+"), "
 			+ KEY_BATTERY_STATE + " TEXT,"
 			+ KEY_BATTERY_LEVEL_DELTA + " TEXT);";
 			
@@ -76,9 +74,8 @@ public class DatabaseAdapter {
 		return db.insert(DB_TABLE, null, initialValues);
 	}
 	
-	public long inserBatteryStat(int statID, String state, String level){
+	public long inserBatteryStat(String state, String level){
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_BATTERY_STAT_ID, statID);
 		initialValues.put(KEY_BATTERY_STATE, state);
 		initialValues.put(KEY_BATTERY_LEVEL_DELTA, level);
 		return db.insert(DB_BATTERY_STAT_TABLE, null, initialValues);
@@ -89,7 +86,7 @@ public class DatabaseAdapter {
 	}
 
 	public Cursor getAllBatteryStats(){
-		return db.query(DB_BATTERY_STAT_TABLE, new String[] {KEY_BATTERY_STAT_ID, KEY_BATTERY_STATE, KEY_BATTERY_LEVEL_DELTA}, null, null, null, null, null);
+		return db.query(DB_BATTERY_STAT_TABLE, new String[] { KEY_BATTERY_STATE, KEY_BATTERY_LEVEL_DELTA}, null, null, null, null, null);
 	}
 	public class MySQLiteHelper extends SQLiteOpenHelper{
 
