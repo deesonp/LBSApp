@@ -3,12 +3,10 @@ package com.lbsapp.Receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.util.Log;
 import com.lbsapp.R;
 import com.lbsapp.Common.UserLocation;
 import com.lbsapp.Utils.Constants;
-import com.lbsapp.Utils.DatabaseAdapter;
 
 /**
  * 

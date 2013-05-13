@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.text.format.DateUtils;
 
 import com.lbsapp.R;
 import com.lbsapp.Utils.Constants;

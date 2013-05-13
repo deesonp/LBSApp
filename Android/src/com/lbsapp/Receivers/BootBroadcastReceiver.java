@@ -23,7 +23,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if(Constants.DEBUG){
-			Log.d(Constants.LOG_TAG, TAG + " : Starting Alarm ...");
+			Log.d(Constants.LOG_TAG, TAG + " : Starting Alarm on Boot ...");
 		}
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		boolean enableBootTracking = pref.getBoolean(context.getString(R.string.boot_tracking_key), false);

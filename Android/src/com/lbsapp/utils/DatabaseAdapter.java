@@ -61,6 +61,9 @@ public class DatabaseAdapter {
 	}
 	
 	public long insertLocation(String lat, String lng){
+		if(Constants.DEBUG){
+			Log.d(Constants.LOG_TAG , TAG+ " : insertLocation:  lat:"+lat+ " , long:" +lng);
+		}
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_TIMESTAMP, formatter.format(currentDate.getTime()));
 		initialValues.put(KEY_LAT, lat);
@@ -70,6 +73,9 @@ public class DatabaseAdapter {
 	
 	
 	public Cursor getAllLocations(){
+		if(Constants.DEBUG){
+			Log.d(Constants.LOG_TAG , TAG+ " : getAllLocations");
+		}
 		return db.query(DB_TABLE, new String [] {KEY_LOCATION_ID, KEY_TIMESTAMP, KEY_LAT, KEY_LNG},null,null,null,null, null);
 	}
 

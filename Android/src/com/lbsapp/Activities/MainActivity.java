@@ -198,9 +198,13 @@ public class MainActivity extends Activity {
 		}
 	};
 
-	// AsyncTask encapsulating the reverse-geocoding API. Since the geocoder API
-	// is blocked,
-	// we do not want to invoke it from the UI thread.
+	/**
+	 * AsyncTask encapsulating the reverse-geocoding API. Since the geocoder API
+	 * is blocked,
+	 * we do not want to invoke it from the UI thread.
+	 * @author http://developer.android.com/training/basics/location/currentlocation.html
+	 *
+	 */
 	private class ReverseGeocodingTask extends AsyncTask<Location, Void, Void> {
 		Context mContext;
 		String addressText = null;

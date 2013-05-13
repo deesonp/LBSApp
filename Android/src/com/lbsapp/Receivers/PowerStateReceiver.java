@@ -5,8 +5,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.lbsapp.Services.UserLocationBroadcastService;
+import com.lbsapp.Utils.Constants;
 
 /**
  * Monitor power changes to disable location services on low power
@@ -19,6 +21,9 @@ public class PowerStateReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		if(Constants.DEBUG){
+			Log.d(Constants.LOG_TAG, TAG + " : Battery status changed");
+		}
 		boolean lowBattery = intent.getAction().equals(Intent.ACTION_BATTERY_LOW);
 		
 		PackageManager packageManager = context.getPackageManager();

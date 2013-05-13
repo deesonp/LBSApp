@@ -2,7 +2,6 @@ package com.lbsapp.Activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -23,7 +21,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.lbsapp.R;
 import com.lbsapp.Utils.Constants;
 import com.lbsapp.Utils.DatabaseAdapter;
@@ -110,10 +107,8 @@ public class LocationMapActivity extends Activity {
 		@Override
 		protected void onPostExecute(ArrayList<MarkerMetaData> result) {
 			super.onPostExecute(result);
-			int i = 1;
 			for (MarkerMetaData m : result) {
 				map.addMarker(new MarkerOptions().position(m.latlng).title(m.address).snippet(m.timeStamp));
-				i++;
 			}
 
 			// Create a line between all points

@@ -1,5 +1,7 @@
 package com.lbsapp.Receivers;
 
+import com.lbsapp.Utils.Constants;
+
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 /**
  * Monitor network changes to disable location updates accordingly
@@ -14,9 +17,14 @@ import android.net.NetworkInfo;
  *
  */
 public class NetworkConnectivityReceiver extends BroadcastReceiver {
+	
+	private static final String TAG = "NetworkConnectivityReceiver";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		if(Constants.DEBUG){
+			Log.d(Constants.LOG_TAG, TAG + " : Checking network connections");
+		}
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 
