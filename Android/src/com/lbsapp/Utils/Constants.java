@@ -4,8 +4,8 @@ import android.app.AlarmManager;
 
 public class Constants {
 
-	public static final boolean DEBUG = true;
-	public static final String LOG_TAG = "LBSApp";
+	public static final boolean DEBUG = false;
+	public static final String LOG_TAG = "MyTracker";
 	public static final int LOCATION_BROADCAST_REQ_CODE = 1;
 	public static final String LOCATION_SETTINGS_PREF_FILE = "LocationSettingsPrefFile";
 	public static final String ALARM_ENABLED_KEY = "alarmEnabled";
