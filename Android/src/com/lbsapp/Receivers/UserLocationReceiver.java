@@ -18,6 +18,13 @@ import com.lbsapp.Common.UserLocation;
 import com.lbsapp.Utils.Constants;
 import com.lbsapp.Utils.DatabaseAdapter;
 
+/**
+ * 
+ * Get Location updates when the alarm is trigger and store in database
+ * 
+ * @author Deeson
+ * 
+ */
 public class UserLocationReceiver extends BroadcastReceiver {
 
 	private static final String TAG = "UserLocationReceiver";
@@ -27,12 +34,10 @@ public class UserLocationReceiver extends BroadcastReceiver {
 	LocationListener locationListener = new LocationListener() {
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-
 		}
 
 		@Override
@@ -66,58 +71,28 @@ public class UserLocationReceiver extends BroadcastReceiver {
 			lm.removeUpdates(locationListener);
 		}
 
-		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && gpsProvideEnabled) {
-			if (Constants.DEBUG) {
-				Log.d(Constants.LOG_TAG, TAG + " :GPS_PROVIDER Enabled.");
-			}
-
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-					Constants.MIN_LOCATION_UPDATE_DISTANCE, Constants.MIN_LOCATION_UPDATE_TIME,
-					locationListener);
-			Location loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			UserLocation.processLocation(context, loc);
-		} else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && networkProviderEnabled) {
+		if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && networkProviderEnabled) {
 			if (Constants.DEBUG) {
 				Log.d(Constants.LOG_TAG, TAG + " :NETWORK_PROVIDER Enabled.");
 			}
 			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
 					Constants.MIN_LOCATION_UPDATE_DISTANCE, Constants.MIN_LOCATION_UPDATE_TIME,
 					locationListener);
-			Location loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			UserLocation.processLocation(context, loc);
-		}
-
-	}
-
-	private String getBatteryState(Intent batteryStatus) {
-		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-		boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
-				|| status == BatteryManager.BATTERY_STATUS_FULL;
-		int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-		boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-		boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-		StringBuffer batteryState = new StringBuffer();
-		if (isCharging) {
-			batteryState.append("CHARGING_");
-			if (usbCharge) {
-				batteryState.append("USB_CHARGE");
-			} else if (acCharge) {
-				batteryState.append("AC_CHARGE");
+			UserLocation.processLocation(context,
+					lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
+		} else {
+			if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) && gpsProvideEnabled) {
+				if (Constants.DEBUG) {
+					Log.d(Constants.LOG_TAG, TAG + " :GPS_PROVIDER Enabled.");
+				}
+				lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+						Constants.MIN_LOCATION_UPDATE_DISTANCE, Constants.MIN_LOCATION_UPDATE_TIME,
+						locationListener);
+				UserLocation.processLocation(context,
+						lm.getLastKnownLocation(LocationManager.GPS_PROVIDER));
 			}
 		}
 
-		return batteryState.toString();
-	}
-
-	private float getBatteryPct(Intent batteryStatus) {
-		int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-		int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-		return level / (float) scale;
-	}
-
-	private Intent getBatteryIntent(Context context) {
-		IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		return context.registerReceiver(null, ifilter);
 	}
 
 }

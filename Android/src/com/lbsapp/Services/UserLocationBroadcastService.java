@@ -9,6 +9,11 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.util.Log;
 
+/**
+ * Service to send broadcast messages of location changes
+ * @author Deeson
+ *
+ */
 public class UserLocationBroadcastService extends IntentService {
 	
 	private static final String TAG = "UserLocationBroadcastService";
@@ -18,6 +23,11 @@ public class UserLocationBroadcastService extends IntentService {
 		super("LocationService");
 	}
 
+	/**
+	 * Check for low battery to disable the broadcast
+	 * @param batteryStatus
+	 * @return
+	 */
 	private boolean isBatteryLow(Intent batteryStatus){
 		int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 		int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE,-1);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LBSApp</string>
+    <string name="app_name">MyTracker</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="tracking_category_key">trackingCategoryKey</string>
@@ -11,11 +11,11 @@
     <string name="update_category_key">updateCategoryKey</string>
 	<string name="alarm_freq_key">alarmFreqKey</string>
 	<string name="settings_tracking_category">Location Tracking</string>
-	<string name="settings_gps_provider_summary">Track location using on-device GPS</string>
+	<string name="settings_gps_provider_summary">Allow application to use on-device GPS to track your activities.\nIf GPS Service is disabled, please enable it from Device Settings.</string>
 	<string name="settings_gps_provider_title">GPS Tracking</string>
-	<string name="settings_network_provider_summary">Track location using on-device WiFi/Network</string>
+	<string name="settings_network_provider_summary">Allow application to use on-device WiFi/Network to track your activities.\nIf Network Services are disabled, please enable it from Device Settings</string>
 	<string name="settings_network_provider_title">WiFi/Network Tracking</string>
-	<string name="settings_boot_tracking_summary">Begin tracking device when the device is turned on</string>
+	<string name="settings_boot_tracking_summary">Begin tracking device when the device is turned on.</string>
 	<string name="settings_boot_tracking_title">Device Boot Tracking</string>
 	<string name="settings_update_category">Location Tracking Updates</string>
 	<string name="settings_alarm_freq">Update Frequency</string>
@@ -25,4 +25,21 @@
 	<string name="cancel">Cancel</string>
 	<string name="enable_location">Enable Service</string>
 	<string name="action_map">Display Map</string>
+	<string name="current_location_text">Current Location:</string>
+	<string name="last_location_text">Last Location:</string>
+	<string name="tracking_status_text">Tracking Status:</string>
+	<string name="tracking_details_text">Tracking Details:</string>
+	<string name="start_tracking">Start Tracking</string>
+	<string name="stop_tracking">Stop Tracking</string>
+	<string name="view_history_text">View History</string>
+	<string name="tracking_enabled">Enabled</string>
+	<string name="tracking_disabled">Disabled</string>
+	<string name="total_distance_travelled">Total Distance Travelled:</string>
+	<string name="last_location_default">Determining last known location of device...</string>
+	<string name="last_location_unable">Unable to find last known location.</string>
+	<string name="no_meters">0 meters</string>
+	<string name="current_location">Current Location</string>
+	<string name ="last_known_location">Last Known Location</string>
+	<string name="location_services_unavil">Location Services are unavaliable.</string>
+	<string name="req_current_location_msg">Requesting current location...</string>
 </resources>

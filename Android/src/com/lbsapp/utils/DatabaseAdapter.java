@@ -10,6 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Create database tables and entries 
+ * Retrieve tuples
+ * @author Deeson
+ *
+ */
 public class DatabaseAdapter {
 	
 	private static final String TAG = "DatabaseAdapter"; 
@@ -25,12 +31,6 @@ public class DatabaseAdapter {
 	private static final String KEY_LAT = "lat";
 	private static final String KEY_LNG = "lng";
 
-	//Battery Table & Columns
-	private static final String DB_BATTERY_STAT_TABLE = "battery";
-	private static final String KEY_ID = "_id";
-	private static final String KEY_BATTERY_LEVEL_DELTA = "level";
-	private static final String KEY_BATTERY_STATE = "state";
-	
 	private final int DB_VER = 2;
 	
 	private static final String TABLE_CREATE = "CREATE TABLE "
@@ -38,12 +38,6 @@ public class DatabaseAdapter {
 			+ KEY_TIMESTAMP + " TEXT NOT NULL,"
 			+ KEY_LAT +" TEXT," + KEY_LNG +" TEXT);";
 	
-	private static final String TABLE_BATTERY_STAT_CREATE = "CREATE TABLE "
-			+ DB_BATTERY_STAT_TABLE 
-			+ " ("+ KEY_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
-			+ KEY_BATTERY_STATE + " TEXT,"
-			+ KEY_BATTERY_LEVEL_DELTA + " TEXT);";
-			
 	
 	private MySQLiteHelper mySqlitHelper;
 	private SQLiteDatabase db;
@@ -74,20 +68,11 @@ public class DatabaseAdapter {
 		return db.insert(DB_TABLE, null, initialValues);
 	}
 	
-	public long inserBatteryStat(String state, String level){
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_BATTERY_STATE, state);
-		initialValues.put(KEY_BATTERY_LEVEL_DELTA, level);
-		return db.insert(DB_BATTERY_STAT_TABLE, null, initialValues);
-	}
 	
 	public Cursor getAllLocations(){
 		return db.query(DB_TABLE, new String [] {KEY_LOCATION_ID, KEY_TIMESTAMP, KEY_LAT, KEY_LNG},null,null,null,null, null);
 	}
 
-	public Cursor getAllBatteryStats(){
-		return db.query(DB_BATTERY_STAT_TABLE, new String[] { KEY_BATTERY_STATE, KEY_BATTERY_LEVEL_DELTA}, null, null, null, null, null);
-	}
 	public class MySQLiteHelper extends SQLiteOpenHelper{
 
 		public MySQLiteHelper(Context context) {
@@ -100,7 +85,6 @@ public class DatabaseAdapter {
 				Log.d(Constants.LOG_TAG , TAG+ " : onCreate");
 			}
 			db.execSQL(TABLE_CREATE);
-			db.execSQL(TABLE_BATTERY_STAT_CREATE);
 		}
 
 		@Override
@@ -109,7 +93,6 @@ public class DatabaseAdapter {
 				Log.w(Constants.LOG_TAG, TAG +": "+ MySQLiteHelper.class.getName()+ ": Upgrading from db version");
 			}
 			db.execSQL("DROP TABLE IF EXISTS " + DB_TABLE);
-			db.execSQL("DROP TABLE IF EXISTS " + DB_BATTERY_STAT_TABLE);
 			onCreate(db);
 		}
 		

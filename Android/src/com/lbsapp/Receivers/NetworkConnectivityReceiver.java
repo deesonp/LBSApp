@@ -8,6 +8,11 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Monitor network changes to disable location updates accordingly
+ * @author Deeson
+ *
+ */
 public class NetworkConnectivityReceiver extends BroadcastReceiver {
 
 	@Override

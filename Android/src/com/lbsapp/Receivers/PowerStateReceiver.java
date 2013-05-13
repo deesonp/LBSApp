@@ -8,6 +8,11 @@ import android.content.pm.PackageManager;
 
 import com.lbsapp.Services.UserLocationBroadcastService;
 
+/**
+ * Monitor power changes to disable location services on low power
+ * @author Deeson
+ *
+ */
 public class PowerStateReceiver extends BroadcastReceiver {
 
 	private static final String TAG = "PowerStateReceiever";

@@ -14,6 +14,14 @@ import android.text.format.DateUtils;
 import com.lbsapp.R;
 import com.lbsapp.Utils.Constants;
 
+/**
+ * Setting menu with location settings options such as enable/disable GPS,
+ * Network Option provided for the users to begin tracking at the boot of the
+ * device Change the frequency of the tracking.
+ * 
+ * @author Deeson
+ * 
+ */
 public class LocationSettingsActivity extends PreferenceActivity {
 
 	static Context context;
@@ -23,8 +31,7 @@ public class LocationSettingsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		context = getApplicationContext();
 		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new LocationPrefsFragment())
-				.commit();
+				.replace(android.R.id.content, new LocationPrefsFragment()).commit();
 
 	}
 
@@ -49,63 +56,52 @@ public class LocationSettingsActivity extends PreferenceActivity {
 
 		private void updatePreferences() {
 			gpsProviderPref = (CheckBoxPreference) findPreference(getString(R.string.gps_provider_key));
-			gpsProviderPref
-					.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			gpsProviderPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
-							editBooleanPreference(preference, newValue);
-							return true;
-						}
-					});
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					editBooleanPreference(preference, newValue);
+					return true;
+				}
+			});
 
 			networkProviderPref = (CheckBoxPreference) findPreference(getString(R.string.network_provider_key));
-			networkProviderPref
-					.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			networkProviderPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
-							editBooleanPreference(preference, newValue);
-							return true;
-						}
-					});
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					editBooleanPreference(preference, newValue);
+					return true;
+				}
+			});
 
 			bootTrackingPref = (CheckBoxPreference) findPreference(getString(R.string.boot_tracking_key));
-			bootTrackingPref
-					.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			bootTrackingPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
-							editBooleanPreference(preference, newValue);
-							return true;
-						}
-					});
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					editBooleanPreference(preference, newValue);
+					return true;
+				}
+			});
 
 			alarmFreqPref = (ListPreference) findPreference(getString(R.string.alarm_freq_key));
-			alarmFreqPref
-					.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			alarmFreqPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
-							if (newValue instanceof String) {
-								SharedPreferences.Editor editor = preferences
-										.edit();
-								editor.putString(preference.getKey(),
-										(String) newValue);
-								editor.commit();
-							}
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					if (newValue instanceof String) {
+						SharedPreferences.Editor editor = preferences.edit();
+						editor.putString(preference.getKey(), (String) newValue);
+						editor.commit();
+					}
 
-							return true;
-						}
-					});
+					return true;
+				}
+			});
 		}
 
-		private void editBooleanPreference(Preference preference,
-				Object newValue) {
+		private void editBooleanPreference(Preference preference, Object newValue) {
 			SharedPreferences.Editor editor = preferences.edit();
 			editor.putBoolean(preference.getKey(), (Boolean) newValue);
 			editor.commit();

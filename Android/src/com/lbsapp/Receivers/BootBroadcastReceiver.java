@@ -11,6 +11,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+/**
+ * Enable tracking device on boot of device
+ * @author Deeson
+ *
+ */
 public class BootBroadcastReceiver extends BroadcastReceiver{
 	
 	private static final String TAG = "BootBroadcastReceiver";
